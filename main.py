@@ -1,3 +1,5 @@
+# 身内用通話通知bot
+
 import discord
 import os
 from datetime import datetime, timedelta
