@@ -1,5 +1,3 @@
-# 身内用通話通知bot
-
 import discord
 import os
 from datetime import datetime, timedelta
@@ -28,11 +26,9 @@ async def on_voice_state_update(member, before, after):
   # 通話チャンネルの状態を監視、入退室がトリガー
   if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(
       after.channel)):
-    # 通知対象外のチャンネルなら終了
-    # if not member.VoiceState.channel == NOALERT_CHANNEL:
-        #now = datetime.utcnow() + timedelta(hours=9)
-        # メッセージを送るチャンネル
-        alert_channel = client.get_channel(ALERT_CHANNEL)
+    #now = datetime.utcnow() + timedelta(hours=9)
+    # メッセージを送るチャンネル
+    alert_channel = client.get_channel(ALERT_CHANNEL)
     if member.id != EXCLUDE_ID:
       # 通話参加時に付与するロールを取得
       role = member.guild.get_role(ROLE_ID)
@@ -43,7 +39,7 @@ async def on_voice_state_update(member, before, after):
           await alert_channel.send(msg)
           await member.add_roles(role)
         else:
-          msg = f'{member.nick} が参加しました。'
+          msg = '<@&' + ROLE_ID2 + '>' + f'{member.nick} が参加しました。'
           await alert_channel.send(msg, tts=TTS)
           await member.add_roles(role)
       elif after.channel is None:
@@ -55,6 +51,7 @@ async def on_voice_state_update(member, before, after):
           msg = f'{member.nick} が退出しました。'
           # await alert_channel.send(msg, tts=TTS)
           await member.remove_roles(role)
+
 
 keep_alive()
 try:
