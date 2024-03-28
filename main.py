@@ -28,31 +28,33 @@ async def on_voice_state_update(member, before, after):
   # 通話チャンネルの状態を監視、入退室がトリガー
   if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(
       after.channel)):
-    #now = datetime.utcnow() + timedelta(hours=9)
-    # メッセージを送るチャンネル
-    alert_channel = client.get_channel(ALERT_CHANNEL)
-    if member.id != EXCLUDE_ID:
-      # 通話参加時に付与するロールを取得
-      role = member.guild.get_role(ROLE_ID)
-      # 入室か退室かを判定
-      if before.channel is None:
-        if member.nick is None:
-          msg = '<@&' + ROLE_ID2 + '>' + f'{member.name} が参加しました。'
-          await alert_channel.send(msg)
-          await member.add_roles(role)
-        else:
-          msg = '<@&' + ROLE_ID2 + '>' + f'{member.nick} が参加しました。'
-          await alert_channel.send(msg, tts=TTS)
-          await member.add_roles(role)
-      elif after.channel is None:
-        if member.nick is None:
-          msg = f'{member.name} が退出しました。'
-          # await alert_channel.send(msg, tts=TTS)
-          await member.remove_roles(role)
-        else:
-          msg = f'{member.nick} が退出しました。'
-          # await alert_channel.send(msg, tts=TTS)
-          await member.remove_roles(role)
+      if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(
+      after.channel)):
+        #now = datetime.utcnow() + timedelta(hours=9)
+        # メッセージを送るチャンネル
+        alert_channel = client.get_channel(ALERT_CHANNEL)
+        if member.id != EXCLUDE_ID:
+          # 通話参加時に付与するロールを取得
+          role = member.guild.get_role(ROLE_ID)
+          # 入室か退室かを判定
+          if before.channel is None:
+            if member.nick is None:
+              msg = '<@&' + ROLE_ID2 + '>' + f'{member.name} が参加しました。'
+              await alert_channel.send(msg)
+              await member.add_roles(role)
+            else:
+              msg = '<@&' + ROLE_ID2 + '>' + f'{member.nick} が参加しました。'
+              await alert_channel.send(msg, tts=TTS)
+              await member.add_roles(role)
+          elif after.channel is None:
+            if member.nick is None:
+              msg = f'{member.name} が退出しました。'
+              # await alert_channel.send(msg, tts=TTS)
+              await member.remove_roles(role)
+            else:
+              msg = f'{member.nick} が退出しました。'
+              # await alert_channel.send(msg, tts=TTS)
+              await member.remove_roles(role)
 
 
 keep_alive()
