@@ -29,7 +29,7 @@ async def on_voice_state_update(member, before, after):
   if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(
       after.channel)):
     # 通知対象外のチャンネルなら終了
-    if not member.VoiceState.channel == NOALERT_CHANNEL:
+    # if not member.VoiceState.channel == NOALERT_CHANNEL:
         #now = datetime.utcnow() + timedelta(hours=9)
         # メッセージを送るチャンネル
         alert_channel = client.get_channel(ALERT_CHANNEL)
