@@ -1,3 +1,4 @@
+# 2024/04/23 バージョン
 import discord
 import os
 from datetime import datetime, timedelta
