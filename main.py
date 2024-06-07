@@ -13,6 +13,7 @@ client = discord.Client(intents=discord.Intents.default())
 SERVER_ID = "1214572848211955733"
 # 通知させるチャンネルのID
 ALERT_CHANNEL = 1214573763526656050
+SHERE= 1214620402035200060
 #テスト用　ALERT_CHANNEL = 1214572849059201045
 # 通話参加時のみ付与させるロールのID
 ROLE_ID = 1222180449892434120
@@ -29,7 +30,8 @@ TTS = True
 @client.event
 #起動時処理
 async def on_ready():
-	last_clocked_time = datetime.datetime.now()			
+	last_clocked_time = datetime.datetime.now()	
+	await SHERE.send('test')
 	while True:
 		#運動部チャンネルに1人でもいたら通知
 		if len(LIST_NOALERT_CHANNEL[0].channel.members) >= 1:
@@ -43,13 +45,13 @@ async def on_ready():
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
 
+@client.event
 async def on_voice_state_update(member, before, after):
-	noalertflg = 0
-# 通話チャンネルの状態を監視、入退室がトリガー
-# 非通知用のチャンネルの場合は処理を終了する。
 	for i in LIST_NOALERT_CHANNEL:
 		if str(after.channel.id) != i:
 			noalertflg = 1
+	# 通話チャンネルの状態を監視、入退室がトリガー
+	# 非通知用のチャンネルの場合は処理を終了する。
 	if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(after.channel)) and noalertflg != 0:
 		# メッセージを送るチャンネル
 		alert_channel = client.get_channel(ALERT_CHANNEL)
@@ -67,14 +69,12 @@ async def on_voice_state_update(member, before, after):
 				msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
 				await alert_channel.send(msg, tts=TTS)
 		elif after.channel is None:			
-			await member.remove_roles(role)
-			#メッセージを削除する
-			# def delete_messages(,,,):
-	keep_alive()
+			await member.remove_roles(role)	
+keep_alive()
 try:
-	client.run(os.environ['TOKEN'])
+  client.run(os.environ['TOKEN'])
 except:
-	os.system("kill")
+  os.system("kill")
  
 # 強制退出処理
 async def move_to_none():
