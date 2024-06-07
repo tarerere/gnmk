@@ -33,7 +33,6 @@ async def on_ready():
 	last_clocked_time = datetime.datetime.now()	
 	shere_channel = client.get_channel(SHERE_ID)
 	rinfit_channel = client.get_channel(LIST_NOALERT_CHANNEL[0])
-
 	while True:
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1:
@@ -41,7 +40,7 @@ async def on_ready():
 			if last_clocked_time.strftime('%H:%M') is not datetime.datetime.now().strftime('%H:%M'):
 				# 1時半に強制退出
 				if datetime.datetime.now().strftime('%H%M') >= '130':
-					await SHERE_ID.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
+					await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
 					time.sleep(30)
 					talk_channel_id = LIST_NOALERT_CHANNEL[0] 
 					# チャンネル経由でサーバー内のボイスチャンネル全体を走査
@@ -57,8 +56,7 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
 	for i in LIST_NOALERT_CHANNEL:
-		chk_channel = client.get_channel(i)
-		if str(after.channel.id) != chk_channel.id:
+		if after.channel.id == client.get_channel(i).id:
 			noalertflg = 1
 	# 通話チャンネルの状態を監視、入退室がトリガー
 	# 非通知用のチャンネルの場合は処理を終了する。
@@ -77,11 +75,12 @@ async def on_voice_state_update(member, before, after):
 				await alert_channel.send(msg)
 			else:
 				msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
-				await alert_channel.send(msg, tts=TTS)
+				await alert_channel.send(msg, tts=TTS)		
 		elif after.channel is None:			
 			await member.remove_roles(role)	
 keep_alive()
 try:
-  client.run(os.environ['TOKEN'])
+  # client.run(os.environ['TOKEN'])
+	  client.run(os.environ['TOKEN'])
 except:
   os.system("kill")
