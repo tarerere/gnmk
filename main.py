@@ -62,7 +62,7 @@ async def on_voice_state_update(member, before, after):
 			noalertflg = 1
 	# 通話チャンネルの状態を監視、入退室がトリガー
 	# 非通知用のチャンネルの場合は処理を終了する。
-	if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(after.channel)) and noalertflg != 0:
+	if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(after.channel)) and noalertflg == 0:
 		# メッセージを送るチャンネル
 		alert_channel = client.get_channel(ALERT_CHANNEL)
 		if member.id != EXCLUDE_ID:
