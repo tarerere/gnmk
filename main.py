@@ -57,7 +57,8 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
 	for i in LIST_NOALERT_CHANNEL:
-		if str(after.channel.id) != i:
+		chk_channel = client.get_channel(i)
+		if str(after.channel.id) != chk_channel.id:
 			noalertflg = 1
 	# 通話チャンネルの状態を監視、入退室がトリガー
 	# 非通知用のチャンネルの場合は処理を終了する。
