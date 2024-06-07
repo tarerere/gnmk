@@ -80,7 +80,6 @@ async def on_voice_state_update(member, before, after):
 			await member.remove_roles(role)	
 keep_alive()
 try:
-  # client.run(os.environ['TOKEN'])
-	  client.run(os.environ['TOKEN'])
+	client.run(os.environ['TOKEN'])
 except:
-  os.system("kill")
+	os.system("kill")
