@@ -39,7 +39,8 @@ async def on_ready():
 			if last_clocked_time.strftime('%H:%M') is not datetime.datetime.now().strftime('%H:%M'):
 				# 1時半に強制退出
 				if datetime.datetime.now().strftime('%H%M') >= '130':
-					await LIST_NOALERT_CHANNEL[0].send('<@&' + ROLE_ID + '>' + '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
+					msg　= '<@&' + ROLE_ID + '>' + '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
+					await SHERE.send(msg, tts=TTS)
 					time.sleep(30)
 					await move_to_none()
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
