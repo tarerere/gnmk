@@ -1,8 +1,10 @@
-# 2024/04/23 バージョン
+# 2024/06/07 バージョン
 import discord
 import os
 from datetime import datetime, timedelta
 from keep import keep_alive
+import asyncio
+import time
 
 client = discord.Client(intents=discord.Intents.default())
 
@@ -18,18 +20,41 @@ ROLE_ID = 1222180449892434120
 ROLE_ID2 = "1214576516365549578"
 # 通知を除外させたいメンバーID(Rhythmとか)
 EXCLUDE_ID = 000000000
-# 通知を除外させたいチャンネルID
-NOALERT_CHANNEL = '1222780507771633715'
+# 通知を除外させたいチャンネルID（0：運動用　1：運動後チル）
+LIST_NOALERT_CHANNEL = ['1222780507771633715','1248475229593014403']
 # TTS
 TTS = True
 #now = datetime.utcnow() + timedelta(hours=9)
+#非通知フラグ
+NOALERT_FLG = 0
 
 @client.event
+#起動時処理
+async def on_ready():
+	last_clocked_time = datetime.datetime.now()
+				
+	while True:
+        #運動部チャンネルに1人でもいたら通知
+		if len(LIST_NOALERT_CHANNEL[0].channel.members) >= 1:
+			#ここから30秒間隔の処理
+			if last_clocked_time('%H:%M') is not datetime.datetime.now('%H:%M'):
+				# 1時半に強制退出
+				if datetime.datetime.now('%H:%M') == '1:30':
+					await LIST_NOALERT_CHANNEL[0].send('<@&' + ROLE_ID + '>' + '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
+					time.sleep(30)
+					await move_to_none()
+					break
+		last_clocked_time = datetime.datetime.now() #時刻更新処理
+		await asyncio.sleep(30)
+
 async def on_voice_state_update(member, before, after):
   # 通話チャンネルの状態を監視、入退室がトリガー
   # 非通知用のチャンネルの場合は処理を終了する。
+ for i in LIST_NOALERT_CHANNEL:
+  if str(after.channel.id) != i:
+    NOALERT_FLG = 1
 
-  if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(after.channel)) and str(after.channel.id) != NOALERT_CHANNEL:
+  if str(member.guild.id) == SERVER_ID and (str(before.channel) != str(after.channel)) and NOALERT_FLG != 0:
     # メッセージを送るチャンネル
     alert_channel = client.get_channel(ALERT_CHANNEL)
     if member.id != EXCLUDE_ID:
@@ -55,3 +80,19 @@ try:
   client.run(os.environ['TOKEN'])
 except:
   os.system("kill")
+ 
+  
+# 強制退出処理
+async def move_to_none():
+	# 接続に利用するオブジェクト
+	client = discord.Client()
+	# 該当サーバーの特定のチャンネルIDを入れてください。
+	talk_channel_id = LIST_NOALERT_CHANNEL[0] 
+	channel = client.get_channel(talk_channel_id)
+	# チャンネル経由でサーバー内のボイスチャンネル全体を走査
+	for ch in channel.guild.voice_channels:
+		for member in ch.members:
+			# move_to(None)で特定のメンバーを切断する
+			await member.move_to(None)
+
+
