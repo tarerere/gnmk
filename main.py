@@ -39,7 +39,7 @@ async def on_ready():
 			#ここから30秒間隔の処理
 			if last_clocked_time.strftime('%H:%M') is not datetime.datetime.now().strftime('%H:%M'):
 				# 1時半に強制退出
-				if datetime.datetime.now().strftime('%H%M') >= '130':
+				if datetime.datetime.now().strftime('%H%M') >= '0130' and datetime.datetime.now().strftime('%H%M') <= '0135':
 					await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
 					time.sleep(30)
 					talk_channel_id = LIST_NOALERT_CHANNEL[0] 
