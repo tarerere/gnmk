@@ -36,19 +36,17 @@ async def on_ready():
 	while True:
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1:
-			#ここから30秒間隔の処理
-			if last_clocked_time.strftime('%H:%M') is not datetime.datetime.now().strftime('%H:%M'):
-				# 1時半に強制退出
-				if int(datetime.datetime.now().strftime('%H%M')) >= 130 and int(datetime.datetime.now().strftime('%H%M')) <= 135:
-					await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
-					time.sleep(30)
-					talk_channel_id = LIST_NOALERT_CHANNEL[0] 
-					# チャンネル経由でサーバー内のボイスチャンネル全体を走査
-					for ch in shere_channel.guild.voice_channels:
-						for member in ch.members:
-							if ch.id == rinfit_channel.id:
-								# move_to(None)で特定のメンバーを切断する
-								await member.move_to(None)
+			# 1時半に強制退出
+			if int(datetime.datetime.now().strftime('%Y%m%d%H%M')) >= int(datetime.datetime.now().strftime('%Y%m%d') + '0130') and int(datetime.datetime.now().strftime('%Y%m%d%H%M')) <= int(datetime.datetime.now().strftime('%Y%m%d') + '0135'):
+				await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
+				time.sleep(30)
+				talk_channel_id = LIST_NOALERT_CHANNEL[0] 
+				# チャンネル経由でサーバー内のボイスチャンネル全体を走査
+				for ch in shere_channel.guild.voice_channels:
+					for member in ch.members:
+						if ch.id == rinfit_channel.id:
+							# move_to(None)で特定のメンバーを切断する
+							await member.move_to(None)
 							
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
