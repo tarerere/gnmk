@@ -6,7 +6,9 @@ from keep import keep_alive
 import asyncio
 import time
 import logging
+from logging import getLogger
 
+logger = getLogger(__name__)
 client = discord.Client(intents=discord.Intents.default())
 
 # 定義
@@ -38,6 +40,7 @@ async def on_ready():
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1:
 			# 1時半に強制退出
+			logger.info(datetime.datetime.now().strftime('%Y%m%d%H%M'))
 			if int(datetime.datetime.now().strftime('%Y%m%d%H%M')) >= int(datetime.datetime.now().strftime('%Y%m%d') + '0130') and int(datetime.datetime.now().strftime('%Y%m%d%H%M')) <= int(datetime.datetime.now().strftime('%Y%m%d') + '0135'):
 				await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
 				time.sleep(30)
