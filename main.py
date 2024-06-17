@@ -5,6 +5,7 @@ import datetime
 from keep import keep_alive
 import asyncio
 import time
+import logging
 
 client = discord.Client(intents=discord.Intents.default())
 
