@@ -1,4 +1,4 @@
-# 2024/06/07 バージョン
+# 2024/06/18 バージョン
 import discord
 import os
 import datetime
