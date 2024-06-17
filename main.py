@@ -57,6 +57,7 @@ async def on_ready():
 
 @client.event
 async def on_voice_state_update(member, before, after):
+	noalertflg = 0
 	for i in LIST_NOALERT_CHANNEL:
 		if if client.get_channel(i).id is not None and after.channel.id == client.get_channel(i).id:
 			noalertflg = 1
