@@ -39,9 +39,8 @@ async def on_ready():
 	while True:
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1:
-			await shere_channel.send('テストだよ', tts=TTS)
+			await shere_channel.send(datetime.datetime.now().strftime('%Y%m%d%H%M') + 'だよ', tts=TTS)
 			# 1時半に強制退出
-			logger.info(datetime.datetime.now().strftime('%Y%m%d%H%M'))
 			if int(datetime.datetime.now().strftime('%Y%m%d%H%M')) >= int(datetime.datetime.now().strftime('%Y%m%d') + '0130') and int(datetime.datetime.now().strftime('%Y%m%d%H%M')) <= int(datetime.datetime.now().strftime('%Y%m%d') + '0135'):
 				await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
 				time.sleep(30)
