@@ -6,6 +6,7 @@ from keep import keep_alive
 import asyncio
 import time
 import logging
+import pytz
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -33,15 +34,16 @@ TTS = True
 @client.event
 #起動時処理
 async def on_ready():
-	last_clocked_time = datetime.datetime.now()	
+	last_clocked_time = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))	
 	shere_channel = client.get_channel(SHERE_ID)
 	rinfit_channel = client.get_channel(LIST_NOALERT_CHANNEL[0])
 	while True:
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1:
-			await shere_channel.send(datetime.datetime.now().strftime('%Y%m%d%H%M') + 'だよ', tts=TTS)
+			now_time = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))	
+			await shere_channel.send(now_time.strftime('%Y%m%d%H%M'), tts=TTS)
 			# 1時半に強制退出
-			if int(datetime.datetime.now().strftime('%Y%m%d%H%M')) >= int(datetime.datetime.now().strftime('%Y%m%d') + '0130') and int(datetime.datetime.now().strftime('%Y%m%d%H%M')) <= int(datetime.datetime.now().strftime('%Y%m%d') + '0135'):
+			if int(now_time.strftime('%Y%m%d%H%M')) >= int(now_time.strftime('%Y%m%d') + '0130') and int(now_time.strftime('%Y%m%d%H%M')) <= int(now_time.strftime('%Y%m%d') + '0135'):
 				await shere_channel.send('30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！', tts=TTS)
 				time.sleep(30)
 				talk_channel_id = LIST_NOALERT_CHANNEL[0] 
@@ -52,7 +54,7 @@ async def on_ready():
 							# move_to(None)で特定のメンバーを切断する
 							await member.move_to(None)
 							
-		last_clocked_time = datetime.datetime.now() #時刻更新処理
+		last_clocked_time = datetime.datetime.now(pytz.timezone('Asia/Tokyo')) #時刻更新処理
 		await asyncio.sleep(30)
 
 @client.event
