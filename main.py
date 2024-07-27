@@ -41,7 +41,7 @@ async def on_ready():
 		if len(rinfit_channel.voice_states.keys()) >= 1:
 			now_time = datetime.datetime.now()	
 			# 1時半に強制退出
-			result = kyouseiKill()
+			result = kyouseiKill(now_time)
 			if result[0] == True:
 				await shere_channel.send(result[1], tts=TTS)
 				time.sleep(30)
@@ -56,7 +56,8 @@ async def on_ready():
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
 
-def kyouseiKill(now,zikoku,msg):
+def kyouseiKill(now):
+	msg = ''
 	blnflg = False
 	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
 		blnflg = True
@@ -64,7 +65,7 @@ def kyouseiKill(now,zikoku,msg):
 	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
 		blnflg = True
 		msg = '30秒後に強制退出がまもなく実行されます。健康を大事にしましょう。'
-	return True,msg
+	return blnflg,msg
 
 @client.event
 async def on_voice_state_update(member, before, after):
