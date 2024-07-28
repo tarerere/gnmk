@@ -75,7 +75,7 @@ def kyouseiKill(now):
 		msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
 		blnflg = True
-		msg = '30秒後に強制退出がまもなく実行されます。睡眠もダイジにしましょう。'
+		msg = '30秒後に強制退出がまもなく実行されます。さすがに寝ましょう。'
 	return blnflg,msg
 
 @client.event
