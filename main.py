@@ -13,19 +13,27 @@ client = discord.Client(intents=discord.Intents.default())
 
 # 定義
 # サーバーID(int型)
-SERVER_ID = "1214572848211955733"
+#じぇねりっくもくり君
+JM_ID = "1214572848211955733"
+# 崩BWサーバー
+HBW_ID = "1262610226826448977"
 # 通知させるチャンネルのID
-ALERT_CHANNEL = 1214573763526656050
+JM_ALERT_CHANNEL = 1214573763526656050
+HBW_ALERT_CHANNEL = 1266800353945321548
+# 運動部用
 SHERE_ID= 1214620402035200060
-#テスト用　ALERT_CHANNEL = 1214572849059201045
-# 通話参加時のみ付与させるロールのID
-ROLE_ID = '1222180449892434120'
-# 通知をメンションするロールID(Rhythmとか)
-ROLE_ID2 = "1214576516365549578"
+# テスト用　ALERT_CHANNEL = 1214572849059201045
+# 通話参加時のみ付与させるロールのID(@通話中)
+JM_ROLE_ID = 1222180449892434120
+HBW_ROLE_ID = 1266806710899708057
+# 通知をメンションするロールID(@通知OK)
+JM_ROLE_ID2 = "1214576516365549578"
+HBW_ROLE_ID2 = "1266797184322506752"
+# 通知を除外させたいチャンネルID（0：運動用　1：運動後チル）
+JM_LIST_NOALERT_CHANNEL = [1222780507771633715,1248475229593014403]
+HBW_LIST_NOALERT_CHANNEL = [1266825109323386983]
 # 通知を除外させたいメンバーID(Rhythmとか)
 EXCLUDE_ID = 000000000
-# 通知を除外させたいチャンネルID（0：運動用　1：運動後チル）
-LIST_NOALERT_CHANNEL = [1222780507771633715,1248475229593014403]
 # TTS
 TTS = True
 #now = datetime.utcnow() + timedelta(hours=9)
@@ -35,17 +43,20 @@ TTS = True
 async def on_ready():
 	last_clocked_time = datetime.datetime.now()	
 	shere_channel = client.get_channel(SHERE_ID)
-	rinfit_channel = client.get_channel(LIST_NOALERT_CHANNEL[0])
+	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
+	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
 	while True:
+		if discord.Guild.id != JM_ID:
+			break
 		#運動部チャンネルに1人でもいたら通知
-		if len(rinfit_channel.voice_states.keys()) >= 1:
+		if len(rinfit_channel.voice_states.keys()) >= 1 or len(cill_channel.voice_states.keys()) >= 1:
 			now_time = datetime.datetime.now()	
 			# 1時半に強制退出
 			result = kyouseiKill(now_time)
 			if result[0] == True:
 				await shere_channel.send(result[1], tts=TTS)
 				time.sleep(30)
-				talk_channel_id = LIST_NOALERT_CHANNEL[0] 
+				talk_channel_id = JM_LIST_NOALERT_CHANNEL[0] 
 				# チャンネル経由でサーバー内のボイスチャンネル全体を走査
 				for ch in shere_channel.guild.voice_channels:
 					for member in ch.members:
@@ -64,11 +75,27 @@ def kyouseiKill(now):
 		msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
 		blnflg = True
-		msg = '30秒後に強制退出がまもなく実行されます。健康を大事にしましょう。'
+		msg = '30秒後に強制退出がまもなく実行されます。睡眠もダイジにしましょう。'
 	return blnflg,msg
 
 @client.event
 async def on_voice_state_update(member, before, after):
+	if after.channel is None:
+		return
+	# サーバーID(int型)
+	if str(member.guild.id) == HBW_ID:
+		SERVER_ID = HBW_ID
+		LIST_NOALERT_CHANNEL = HBW_LIST_NOALERT_CHANNEL
+		ALERT_CHANNEL =  HBW_ALERT_CHANNEL
+		ROLE_ID = HBW_ROLE_ID
+		ROLE_ID2 = HBW_ROLE_ID2
+	else:
+		SERVER_ID = JM_ID
+		LIST_NOALERT_CHANNEL = JM_LIST_NOALERT_CHANNEL
+		ALERT_CHANNEL = JM_ALERT_CHANNEL
+		ROLE_ID = JM_ROLE_ID
+		ROLE_ID2 = JM_ROLE_ID2
+		
 	noalertflg = 0
 	for i in LIST_NOALERT_CHANNEL:
 		chk_channel = client.get_channel(i)
