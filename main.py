@@ -46,8 +46,6 @@ async def on_ready():
 	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
 	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
 	while True:
-		if discord.Guild.id != JM_ID:
-			break
 		#運動部チャンネルに1人でもいたら通知
 		if len(rinfit_channel.voice_states.keys()) >= 1 or len(cill_channel.voice_states.keys()) >= 1:
 			now_time = datetime.datetime.now()	
