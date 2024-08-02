@@ -43,37 +43,42 @@ TTS = True
 async def on_ready():
 	last_clocked_time = datetime.datetime.now()	
 	shere_channel = client.get_channel(SHERE_ID)
-	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
-	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
 	while True:
 		#運動部チャンネルに1人でもいたら通知
-		if len(rinfit_channel.voice_states.keys()) >= 1 or len(cill_channel.voice_states.keys()) >= 1:
-			now_time = datetime.datetime.now()	
-			# 1時半に強制退出
-			result = kyouseiKill(now_time)
-			if result[0] == True:
-				await shere_channel.send(result[1], tts=TTS)
-				time.sleep(30)
-				talk_channel_id = JM_LIST_NOALERT_CHANNEL[0] 
-				# チャンネル経由でサーバー内のボイスチャンネル全体を走査
-				for ch in shere_channel.guild.voice_channels:
-					for member in ch.members:
-						if ch.id == rinfit_channel.id:
-							# move_to(None)で特定のメンバーを切断する
-							await member.move_to(None)		
+		# 1時半と2時45分に強制退出
+		result = kyouseiKill()
+		if result[0] == True:
+			await shere_channel.send(result[1], tts=TTS)
+			time.sleep(30)
+			# チャンネル経由でサーバー内のボイスチャンネル全体を走査
+			for ch in shere_channel.guild.voice_channels:
+				for member in ch.members:
+					if ch.id == result[2].id:
+						# move_to(None)で特定のメンバーを切断する
+						await member.move_to(None)
+							
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
 
 def kyouseiKill(now):
 	msg = ''
 	blnflg = False
-	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
-		blnflg = True
-		msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
-	if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
-		blnflg = True
-		msg = '30秒後に強制退出がまもなく実行されます。さすがに寝ましょう。'
-	return blnflg,msg
+	now = datetime.datetime.now()	
+	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
+	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
+	
+	if len(rinfit_channel.voice_states.keys()) >= 1:
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
+			blnflg = True
+			msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
+			kill_channel = rinfit_channel
+	elif len(cill_channel.voice_states.keys()) >= 1:
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
+			blnflg = True
+			msg = '30秒後に強制退出がまもなく実行されます。さすがに寝ましょう。'
+			kill_channel = cill_channel
+			
+	return blnflg,msg,kill_channel
 
 @client.event
 async def on_voice_state_update(member, before, after):
