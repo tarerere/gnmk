@@ -60,12 +60,13 @@ async def on_ready():
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
 
-def kyouseiKill(now):
+def kyouseiKill():
 	msg = ''
 	blnflg = False
 	now = datetime.datetime.now()	
 	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
 	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
+	kill_channel = None
 	
 	if len(rinfit_channel.voice_states.keys()) >= 1:
 		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
