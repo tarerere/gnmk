@@ -60,11 +60,9 @@ async def on_ready():
 					for member in ch.members:
 						if ch.id == rinfit_channel.id:
 							# move_to(None)で特定のメンバーを切断する
-							await member.move_to(None)
-							
-							
-			last_clocked_time = datetime.datetime.now() #時刻更新処理
-			await asyncio.sleep(30)
+							await member.move_to(None)		
+		last_clocked_time = datetime.datetime.now() #時刻更新処理
+		await asyncio.sleep(30)
 
 def kyouseiKill(now):
 	msg = ''
