@@ -71,12 +71,12 @@ def kyouseiKill():
 	if len(rinfit_channel.voice_states.keys()) >= 1:
 		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
 			blnflg = True
-			msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
+			msg = '20秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 			kill_channel = rinfit_channel
 	elif len(cill_channel.voice_states.keys()) >= 1:
 		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1720') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1725'):
 			blnflg = True
-			msg = '30秒後に強制退出がまもなく実行されます。遅くまでお疲れ様です。原稿は進みましたか？'
+			msg = '20秒後に強制退出がまもなく実行されます。遅くまでお疲れ様です。原稿は進みましたか？'
 			kill_channel = cill_channel
 			
 	return blnflg,msg,kill_channel
