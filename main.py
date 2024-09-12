@@ -49,7 +49,7 @@ async def on_ready():
 		result = kyouseiKill()
 		if result[0] == True:
 			await shere_channel.send(result[1], tts=TTS)
-			time.sleep(30)
+			time.sleep(20)
 			# チャンネル経由でサーバー内のボイスチャンネル全体を走査
 			for ch in shere_channel.guild.voice_channels:
 				for member in ch.members:
@@ -74,7 +74,7 @@ def kyouseiKill():
 			msg = '30秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 			kill_channel = rinfit_channel
 	elif len(cill_channel.voice_states.keys()) >= 1:
-		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1745') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1750'):
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1720') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1725'):
 			blnflg = True
 			msg = '30秒後に強制退出がまもなく実行されます。さすがに寝ましょう。'
 			kill_channel = cill_channel
