@@ -29,9 +29,10 @@ HBW_ROLE_ID = 1266806710899708057
 # 通知をメンションするロールID(@通知OK)
 JM_ROLE_ID2 = "1214576516365549578"
 HBW_ROLE_ID2 = "1266797184322506752"
-# 通知を除外させたいチャンネルID（0：運動用　1：運動後チル）
+# 通知を除外させたいチャンネルID（1：運動用　2：運動後チル）
 #JM_LIST_NOALERT_CHANNEL = [1222780507771633715,1248475229593014403]
-JM_LIST_NOALERT_CHANNEL = [1248475229593014403]
+JM_LIST_NOALERT_CHANNEL1 = [1222780507771633715]
+JM_LIST_NOALERT_CHANNEL2 = [1248475229593014403]
 HBW_LIST_NOALERT_CHANNEL = [1266825109323386983]
 # 通知を除外させたいメンバーID(Rhythmとか)
 EXCLUDE_ID = 000000000
@@ -65,17 +66,17 @@ def kyouseiKill():
 	msg = ''
 	blnflg = False
 	now = datetime.datetime.now()	
-	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[0])
-	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL[1])
+	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL1)
+	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL2)
 	kill_channel = None
 	
 	if len(rinfit_channel.voice_states.keys()) >= 1:
-		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1630') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1730') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1635'):
 			blnflg = True
 			msg = '20秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 			kill_channel = rinfit_channel
 	elif len(cill_channel.voice_states.keys()) >= 1:
-		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1720') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1721'):
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1820') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1721'):
 			blnflg = True
 			msg = '20秒後に強制退出がまもなく実行されます。遅くまでお疲れ様です。原稿は進みましたか？'
 			kill_channel = cill_channel
