@@ -1,4 +1,4 @@
-# 2024/06/18 バージョン
+# 2026/01/04 バージョン
 import discord
 import os
 import datetime
@@ -30,12 +30,13 @@ HBW_ROLE_ID = 1266806710899708057
 JM_ROLE_ID2 = "1214576516365549578"
 HBW_ROLE_ID2 = "1266797184322506752"
 # 通知をメンションするロールID(@運動部)
-JM_ROLE_UNDO = "1234477798819627109"
-# 通知を除外させたいチャンネルID（1：運動用　2：運動後チル）
+JM_ROLE_UNDO_ID = "1234477798819627109"
 #JM_LIST_NOALERT_CHANNEL = [1222780507771633715,1248475229593014403]
-JM_LIST_NOALERT_CHANNEL1 = [1222780507771633715]
-JM_LIST_NOALERT_CHANNEL2 = [1248475229593014403]
-HBW_LIST_NOALERT_CHANNEL = [1266825109323386983]
+JM_LIST_NOALERT_CHANNEL = [1248475229593014403]
+JM_CN_UNDO = 1222780507771633715 #運動用
+# 通知を除外するチャンネルID（運動後チル）
+JM_CH_CHILL = 1248475229593014403 #チル
+HBW_LIST_NOALERT_CHANNEL = 1266825109323386983
 # 通知を除外させたいメンバーID(Rhythmとか)
 EXCLUDE_ID = 000000000
 # TTS
@@ -49,7 +50,7 @@ async def on_ready():
 	shere_channel = client.get_channel(SHERE_ID)
 	while True:
 		#運動部チャンネルに1人でもいたら通知
-		# 1時半と2時45分に強制退出
+		# 2時半と3時20分に強制退出
 		result = kyouseiKill()
 		if result[0] == True:
 			await shere_channel.send(result[1], tts=TTS)
@@ -68,8 +69,8 @@ def kyouseiKill():
 	msg = ''
 	blnflg = False
 	now = datetime.datetime.now()	
-	rinfit_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL1)
-	cill_channel = client.get_channel(JM_LIST_NOALERT_CHANNEL2)
+	rinfit_channel = client.get_channel(JM_CN_UNDO)
+	cill_channel = client.get_channel(JM_CH_CHILL)
 	kill_channel = None
 	
 	if len(rinfit_channel.voice_states.keys()) >= 1:
@@ -98,7 +99,7 @@ async def on_voice_state_update(member, before, after):
 		ROLE_ID2 = HBW_ROLE_ID2
 	else:
 		SERVER_ID = JM_ID
-		LIST_NOALERT_CHANNEL = JM_LIST_NOALERT_CHANNEL2
+		LIST_NOALERT_CHANNEL = JM_LIST_NOALERT_CHANNEL
 		ALERT_CHANNEL = JM_ALERT_CHANNEL
 		ROLE_ID = JM_ROLE_ID
 		ROLE_ID2 = JM_ROLE_ID2
@@ -122,13 +123,16 @@ async def on_voice_state_update(member, before, after):
 				await member.add_roles(role)	
 		if len(after.channel.members) == 1:
 			if member.nick is None:
-				if after.channel.id == JM_LIST_NOALERT_CHANNEL1:
-					msg = '<@&' + JM_ROLE_UNDO + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
+				if after.channel.id == JM_CN_UNDO:
+					msg = '<@&' + JM_ROLE_UNDO_ID + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
 				else:
 					msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
 				await alert_channel.send(msg)
 			else:
-				msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
+				if after.channel.id == JM_CN_UNDO:
+					msg = '<@&' + JM_ROLE_UNDO_ID + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
+				else:
+					msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
 				await alert_channel.send(msg, tts=TTS)		
 		elif after.channel is None:			
 			await member.remove_roles(role)	
