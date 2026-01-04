@@ -78,7 +78,7 @@ def kyouseiKill():
 	elif len(cill_channel.voice_states.keys()) >= 1:
 		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1820') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1721'):
 			blnflg = True
-			msg = '20秒後に強制退出がまもなく実行されます。遅くまでお疲れ様です。原稿は進みましたか？'
+			msg = '20秒後に強制退出がまもなく実行されます。早く寝てましょう。'
 			kill_channel = cill_channel
 			
 	return blnflg,msg,kill_channel
@@ -96,7 +96,7 @@ async def on_voice_state_update(member, before, after):
 		ROLE_ID2 = HBW_ROLE_ID2
 	else:
 		SERVER_ID = JM_ID
-		LIST_NOALERT_CHANNEL = JM_LIST_NOALERT_CHANNEL
+		LIST_NOALERT_CHANNEL = JM_LIST_NOALERT_CHANNEL2
 		ALERT_CHANNEL = JM_ALERT_CHANNEL
 		ROLE_ID = JM_ROLE_ID
 		ROLE_ID2 = JM_ROLE_ID2
