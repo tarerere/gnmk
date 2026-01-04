@@ -122,7 +122,7 @@ async def on_voice_state_update(member, before, after):
 				await member.add_roles(role)	
 		if len(after.channel.members) == 1:
 			if member.nick is None:
-				if after.channel.id == JM_LIST_NOALERT_CHANNEL1
+				if after.channel.id == JM_LIST_NOALERT_CHANNEL1:
 					msg = '<@&' + JM_ROLE_UNDO + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
 				else:
 					msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
