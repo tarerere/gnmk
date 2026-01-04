@@ -29,6 +29,8 @@ HBW_ROLE_ID = 1266806710899708057
 # 通知をメンションするロールID(@通知OK)
 JM_ROLE_ID2 = "1214576516365549578"
 HBW_ROLE_ID2 = "1266797184322506752"
+# 通知をメンションするロールID(@運動部)
+JM_ROLE_UNDO = "1234477798819627109"
 # 通知を除外させたいチャンネルID（1：運動用　2：運動後チル）
 #JM_LIST_NOALERT_CHANNEL = [1222780507771633715,1248475229593014403]
 JM_LIST_NOALERT_CHANNEL1 = [1222780507771633715]
@@ -120,7 +122,10 @@ async def on_voice_state_update(member, before, after):
 				await member.add_roles(role)	
 		if len(after.channel.members) == 1:
 			if member.nick is None:
-				msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
+				if after.channel.id == JM_LIST_NOALERT_CHANNEL1
+					msg = '<@&' + JM_ROLE_UNDO + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
+				else:
+					msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.name} が参加しました。'
 				await alert_channel.send(msg)
 			else:
 				msg = '<@&' + ROLE_ID2 + '>' + f'{after.channel.name} に ' + f'{member.nick} が参加しました。'
