@@ -6,7 +6,9 @@ from keep import keep_alive
 import asyncio
 import time
 import logging
+import sys
 from logging import getLogger
+
 
 logger = getLogger(__name__)
 client = discord.Client(intents=discord.Intents.default())
@@ -64,6 +66,11 @@ async def on_ready():
 							
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
+
+@client.event
+async def on_disconnect():
+    print("Gateway disconnected -> exit to force restart")
+    sys.exit(1) 
 
 def kyouseiKill():
 	msg = ''
@@ -141,3 +148,4 @@ try:
 	client.run(os.environ['TOKEN'])
 except:
 	os.system("kill")
+
