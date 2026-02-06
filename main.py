@@ -136,9 +136,17 @@ async def on_voice_state_update(member, before, after):
 				await alert_channel.send(msg, tts=TTS)		
 		elif after.channel is None:			
 			await member.remove_roles(role)	
+			
 keep_alive()
 try:
-	client.run(os.environ['TOKEN'])
-except:
+    # トークンが正しく読み込めているか確認するログを追加
+    token = os.environ.get('TOKEN')
+    if token is None:
+        print("Error: TOKEN environment variable is not set!")
+    else:
+        client.run(token)
+except Exception as e:
+    # killコマンドではなく、実際のエラー内容をログに出力する
+    print(f"Bot failed to start: {e}")
 	os.system("kill")
 
