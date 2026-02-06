@@ -1,4 +1,4 @@
-# 2026/01/04 バージョン
+# 2026/02/06 バージョン
 import discord
 import os
 import datetime
@@ -6,9 +6,7 @@ from keep import keep_alive
 import asyncio
 import time
 import logging
-import sys
 from logging import getLogger
-
 
 logger = getLogger(__name__)
 client = discord.Client(intents=discord.Intents.default())
@@ -67,11 +65,6 @@ async def on_ready():
 		last_clocked_time = datetime.datetime.now() #時刻更新処理
 		await asyncio.sleep(30)
 
-@client.event
-async def on_disconnect():
-    print("Gateway disconnected -> exit to force restart")
-    sys.exit(1) 
-
 def kyouseiKill():
 	msg = ''
 	blnflg = False
@@ -79,16 +72,16 @@ def kyouseiKill():
 	rinfit_channel = client.get_channel(JM_CN_UNDO)
 	cill_channel = client.get_channel(JM_CH_CHILL)
 	kill_channel = None
-	
+	# UTC標準時間　1730⇒230
 	if len(rinfit_channel.voice_states.keys()) >= 1:
 		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1730') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1735'):
 			blnflg = True
 			msg = '20秒後に強制退出がまもなく実行されます。本日も運動お疲れ様でした！'
 			kill_channel = rinfit_channel
 	elif len(cill_channel.voice_states.keys()) >= 1:
-		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1820') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1823'):
+		if int(now.strftime('%Y%m%d%H%M')) >= int(now.strftime('%Y%m%d') + '1820') and int(now.strftime('%Y%m%d%H%M')) <= int(now.strftime('%Y%m%d') + '1821'):
 			blnflg = True
-			msg = '20秒後に強制退出がまもなく実行されます。早く寝ましょう。'
+			msg = '20秒後に強制退出がまもなく実行されます。早く寝てましょう。'
 			kill_channel = cill_channel
 			
 	return blnflg,msg,kill_channel
